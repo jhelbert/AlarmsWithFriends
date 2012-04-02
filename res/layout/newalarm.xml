@@ -26,13 +26,9 @@
         android:layout_weight="0"
         android:paddingBottom="4dip"
         android:text="alarm_controller"/>
-
-    <Button android:id="@+id/one_shot"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" 
-        android:text="one_shot_alarm">
-        <requestFocus />
-    </Button>
-
+   <Button android:layout_weight="0" android:text="one_shot_alarm" android:id="@+id/one_shot" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+    <TimePicker android:layout_weight="0" android:id="@+id/timePicker1" android:layout_width="wrap_content" android:layout_height="wrap_content"></TimePicker>
+    
     <Button android:id="@+id/start_repeating"
         android:layout_width="wrap_content" android:layout_height="wrap_content" 
         android:text="start_repeating_alarm" />
