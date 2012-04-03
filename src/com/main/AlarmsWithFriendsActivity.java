@@ -34,7 +34,24 @@ public class AlarmsWithFriendsActivity extends Activity {
                 System.out.println( "aaa");
                 Log.d("tag", "msg");
                 Intent intent = new Intent(AlarmsWithFriendsActivity.this, MyAlarms.class);
-                System.out.println( "bbb");
+   
+                startActivity(intent);
+                
+                return false;
+            }
+
+            
+            
+        });
+        
+        friendsAlarms.setOnTouchListener(new OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+                System.out.println( "aaa");
+                Log.d("tag", "msg");
+                Intent intent = new Intent(AlarmsWithFriendsActivity.this, GroupAlarms.class);
+   
                 startActivity(intent);
                 
                 return false;

@@ -20,36 +20,6 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- * Example of scheduling one-shot and repeating alarms.  See
- * {@link OneShotAlarm} for the code run when the one-shot alarm goes off, and
- * {@link RepeatingAlarm} for the code run when the repeating alarm goes off.
- * <h4>Demo</h4>
-App/Service/Alarm Controller
-
-<h4>Source files</h4>
-<table class="LinkTable">
-        <tr>
-            <td class="LinkColumn">src/com.example.android.apis/app/AlarmController.java</td>
-            <td class="DescrColumn">The activity that lets you schedule alarms</td>
-        </tr>
-        <tr>
-            <td class="LinkColumn">src/com.example.android.apis/app/OneShotAlarm.java</td>
-            <td class="DescrColumn">This is an intent receiver that executes when the
-                one-shot alarm goes off</td>
-        </tr>
-        <tr>
-            <td class="LinkColumn">src/com.example.android.apis/app/RepeatingAlarm.java</td>
-            <td class="DescrColumn">This is an intent receiver that executes when the
-                repeating alarm goes off</td>
-        </tr>
-        <tr>
-            <td class="LinkColumn">/res/any/layout/alarm_controller.xml</td>
-            <td class="DescrColumn">Defines contents of the screen</td>
-        </tr>
-</table>
-
- */
 public class NewAlarm extends Activity {
     Toast mToast;
     
@@ -98,9 +68,7 @@ public class NewAlarm extends Activity {
             PendingIntent sender = PendingIntent.getBroadcast(NewAlarm.this,
                     0, intent, 0);
 
-            // We want the alarm to go off 30 seconds from now.
-            
-            //calendar.setTimeInMillis(System.currentTimeMillis());
+          
             Date date = new Date();
             int year = calendar.get(Calendar.YEAR);
             int day = calendar.get(Calendar.DATE);
@@ -144,6 +112,8 @@ public class NewAlarm extends Activity {
             AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
             am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                             firstTime, 15*1000, sender);
+            
+            
 
             // Tell the user about what we did.
             if (mToast != null) {

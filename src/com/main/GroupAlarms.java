@@ -15,7 +15,7 @@ import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MyAlarms extends Activity {
+public class GroupAlarms extends Activity {
     /** Called when the activity is first created. */
     
     private Button newAlarm;
@@ -48,7 +48,7 @@ public class MyAlarms extends Activity {
 
             @Override
             public void onClick(View arg0) {
-                Intent intent = new Intent(MyAlarms.this, NewAlarm.class);
+                Intent intent = new Intent(GroupAlarms.this, NewGroupAlarm.class);
                 
                 startActivity(intent);
                 
