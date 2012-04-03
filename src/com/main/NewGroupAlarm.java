@@ -88,9 +88,14 @@ public class NewGroupAlarm extends Activity {
         ArrayAdapter <CharSequence> adapter =
                 new ArrayAdapter <CharSequence> (this, android.R.layout.simple_spinner_item );
               adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        adapter.add("Basketball Team");
+        for (GroupList g : groups) {
+            adapter.add(g.getName());
+            
+        }
+        
         Spinner spin = (Spinner) findViewById(R.id.spinner1);
         spin.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         //save(output);
         
     }
@@ -116,7 +121,7 @@ public class NewGroupAlarm extends Activity {
             e.printStackTrace();
         }
         Button button = (Button)findViewById(R.id.one_shot_group);
-        //button.setText(input);
+        button.setText(input);
         return input;
         
     }
@@ -201,9 +206,10 @@ public class NewGroupAlarm extends Activity {
             if (mToast != null) {
                 mToast.cancel();
             }
-            mToast = Toast.makeText(NewGroupAlarm.this, "one_shot_scheduled",
+            mToast = Toast.makeText(NewGroupAlarm.this, "Alarm Sent!",
                     Toast.LENGTH_LONG);
             mToast.show();
+            
         }
     };
 
@@ -237,7 +243,18 @@ public class NewGroupAlarm extends Activity {
                 ArrayList<String> newGroupNumbers = extras2.getStringArrayList("numbers");
                 String newGroupName = extras2.getString("name");
                 
+                
                 GroupList g = new GroupList(newGroupName);
+                ArrayAdapter <CharSequence> adapter =
+                        new ArrayAdapter <CharSequence> (this, android.R.layout.simple_spinner_item );
+                      adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                
+                    adapter.add(g.getName());
+                    
+                
+                adapter.notifyDataSetChanged();
+                Spinner spin = (Spinner) findViewById(R.id.spinner1);
+                spin.setAdapter(adapter);
                 g.addAll(newGroupNumbers);
                 groups.add(g);
                 String o = writeGroupsData();

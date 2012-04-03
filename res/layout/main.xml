@@ -19,7 +19,7 @@
  <Button android:id="@+id/sButton01" 
  	android:layout_width="fill_parent" 
  	android:layout_height="wrap_content"
- 	android:text="Set A Friend's Alarms" />
+ 	android:text="Set A Group Alarm" />
  	
   <Button android:id="@+id/sButton02" 
  	android:layout_width="fill_parent" 
