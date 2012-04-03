@@ -20,5 +20,11 @@ public class GroupList {
     public String getName() {
         return name;
     }
+    
+    public void addAll(ArrayList<String> numbers) {
+        for (String n : numbers) {
+            addContact(n);
+        }
+    }
 
 }

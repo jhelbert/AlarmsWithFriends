@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.TimePicker.OnTimeChangedListener;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ public class NewGroupAlarm extends Activity {
     Toast mToast;
     private static final int CONTACT_PICKER_RESULT = 1001;
     TimePicker alarm_time = null;
+    TextView dataview = null;
     
     Calendar calendar = Calendar.getInstance();
     int hours = calendar.get(Calendar.HOUR);
@@ -47,6 +49,18 @@ public class NewGroupAlarm extends Activity {
         // Watch for button clicks.
         Button button = (Button)findViewById(R.id.one_shot_group);
         button.setOnClickListener(mOneShotListener);
+        Button new_group = (Button)findViewById(R.id.new_list);
+        new_group.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                Intent intent = new Intent(NewGroupAlarm.this, ContactPickerActivity.class);
+                
+                startActivityForResult(intent,99);
+                
+            }
+            
+        });
     
         
         alarm_time = (TimePicker)findViewById(R.id.timePickerGroup);
@@ -60,10 +74,11 @@ public class NewGroupAlarm extends Activity {
             }
             
         });
-        
+        dataview = (TextView)findViewById(R.id.groupdata);
         String s = getInput("groups");
         getGroups(s);
         String output = writeGroupsData();
+        dataview.setText(output);
         save(output);
         
     }
@@ -78,12 +93,18 @@ public class NewGroupAlarm extends Activity {
             fis.read(b);
             input = new String(b);
         } catch (FileNotFoundException e) {
+            Button button = (Button)findViewById(R.id.one_shot_group);
+            button.setText("error1");
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
             // TODO Auto-generated catch block
+            Button button = (Button)findViewById(R.id.one_shot_group);
+            button.setText("error2");
             e.printStackTrace();
         }
+        Button button = (Button)findViewById(R.id.one_shot_group);
+        button.setText(input);
         return input;
         
     }
@@ -93,7 +114,7 @@ public class NewGroupAlarm extends Activity {
         String [] lines = input.split("\n");
         
         for (String l : lines) {
-           if (Character.getNumericValue(l.charAt(0)) >= 0) {
+           if (l.length() > 0 && Character.getNumericValue(l.charAt(0)) >= 0) {
                
            }
         }
@@ -170,6 +191,7 @@ public class NewGroupAlarm extends Activity {
         if (resultCode == RESULT_OK) {  
             switch (requestCode) {  
             case CONTACT_PICKER_RESULT:  
+                
                 // handle contact results  
                 Bundle extras = data.getExtras();  
                 Set<String> keys = extras.keySet();  
@@ -184,6 +206,22 @@ public class NewGroupAlarm extends Activity {
                 
                 Uri result = data.getData(); 
                 //text.setText(extras.toString());
+                break;
+            case 99:
+                String s = getInput("groups");
+                getGroups(s);
+                Button new_group = (Button)findViewById(R.id.new_list);
+                new_group.setText(groups.toString());
+                Bundle extras2 = data.getExtras();  
+                ArrayList<String> newGroupNumbers = extras2.getStringArrayList("numbers");
+                String newGroupName = extras2.getString("name");
+                
+                GroupList g = new GroupList(newGroupName);
+                g.addAll(newGroupNumbers);
+                groups.add(g);
+                String o = writeGroupsData();
+                dataview.setText(o);
+                save(o);
                 
           
   
