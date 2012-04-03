@@ -14,10 +14,13 @@ public final class R {
         public static final int icon=0x7f020000;
     }
     public static final class id {
-        public static final int add=0x7f050012;
-        public static final int delete=0x7f050013;
+        public static final int AcceptAlarmDIsplay=0x7f050011;
+        public static final int accept=0x7f050012;
+        public static final int add=0x7f050015;
+        public static final int delete=0x7f050016;
+        public static final int dismiss=0x7f050013;
         public static final int do_email_picker=0x7f050001;
-        public static final int group=0x7f050011;
+        public static final int group=0x7f050014;
         public static final int group_done=0x7f050002;
         public static final int groupdata=0x7f05000f;
         public static final int invite_email=0x7f050000;
@@ -41,7 +44,8 @@ public final class R {
         public static final int myalarms=0x7f030002;
         public static final int newalarm=0x7f030003;
         public static final int newgroupalarm=0x7f030004;
-        public static final int testlayout=0x7f030005;
+        public static final int receivealarm=0x7f030005;
+        public static final int testlayout=0x7f030006;
     }
     public static final class string {
         public static final int app_name=0x7f040001;

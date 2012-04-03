@@ -120,11 +120,11 @@ public class NewGroupAlarm extends Activity {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             Button button = (Button)findViewById(R.id.one_shot_group);
-            button.setText("error2");
+            //button.setText("error2");
             e.printStackTrace();
         }
-        Button button = (Button)findViewById(R.id.one_shot_group);
-        button.setText(input);
+        //Button button = (Button)findViewById(R.id.one_shot_group);
+        //button.setText(input);
         return input;
         
     }
@@ -279,7 +279,7 @@ public class NewGroupAlarm extends Activity {
                 g.addAll(newGroupNumbers);
                 groups.add(g);
                 String o = writeGroupsData();
-                new_group.setText(o);
+                //new_group.setText(o);
                 save(o);
                 
           
