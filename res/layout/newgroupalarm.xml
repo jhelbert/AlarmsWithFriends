@@ -17,19 +17,14 @@
 <!-- Demonstrates starting and stopping a local service.
      See corresponding Java code com.android.sdk.app.LocalSerice.java. -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:padding="4dip"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:padding="4dip"
     android:gravity="center_horizontal"
     android:layout_width="match_parent" android:layout_height="match_parent" android:weightSum="1">
-    <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/new_list" android:layout_weight="0" android:text="New Group"></Button>
-
-    <TextView
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:paddingBottom="4dip"
-        android:text="alarm_controller"/>
-   <Button android:layout_weight="0" android:text="one_shot_alarm_group" android:id="@+id/one_shot_group" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-    <TimePicker android:layout_weight="0" android:id="@+id/timePickerGroup" android:layout_width="wrap_content" android:layout_height="wrap_content"></TimePicker>
-<TextView android:id="@+id/groupdata"    android:layout_width="match_parent" android:layout_height="wrap_content"></TextView>
+    <TimePicker android:layout_below="@+id/new_list" android:layout_width="249dp" android:layout_height="wrap_content" android:paddingBottom="30dip" android:id="@+id/timePickerGroup" android:layout_weight="0.10"></TimePicker>
+    <Button android:layout_below="@+id/timePickerGroup" android:layout_weight="0" android:text="Send Group Alarm" android:id="@+id/one_shot_group" android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
+<TextView android:layout_below="@+id/one_shot_group" android:id="@+id/groupdata"    android:layout_width="match_parent" android:layout_height="wrap_content" ></TextView>
+<Spinner android:id="@+id/spinner1" android:layout_width="170dp" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/new_list" android:layout_alignLeft="@+id/timePickerGroup"></Spinner>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/new_list" android:text="New Group" android:layout_alignBottom="@+id/spinner1" android:layout_alignRight="@+id/one_shot_group"></Button>
 
 
-</LinearLayout>
+</RelativeLayout>

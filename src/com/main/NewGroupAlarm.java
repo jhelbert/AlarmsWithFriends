@@ -1,5 +1,6 @@
 package com.main;
-
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuff.Mode;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,8 +14,10 @@ import android.os.SystemClock;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.TimePicker.OnTimeChangedListener;
@@ -49,7 +52,9 @@ public class NewGroupAlarm extends Activity {
         // Watch for button clicks.
         Button button = (Button)findViewById(R.id.one_shot_group);
         button.setOnClickListener(mOneShotListener);
+        button.getBackground().setColorFilter(0xFF00FF00, PorterDuff.Mode.MULTIPLY);
         Button new_group = (Button)findViewById(R.id.new_list);
+        new_group.getBackground().setColorFilter(0xFFFF0000, PorterDuff.Mode.MULTIPLY);
         new_group.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -79,7 +84,14 @@ public class NewGroupAlarm extends Activity {
         getGroups(s);
         String output = writeGroupsData();
         dataview.setText(output);
-        save(output);
+        
+        ArrayAdapter <CharSequence> adapter =
+                new ArrayAdapter <CharSequence> (this, android.R.layout.simple_spinner_item );
+              adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.add("Basketball Team");
+        Spinner spin = (Spinner) findViewById(R.id.spinner1);
+        spin.setAdapter(adapter);
+        //save(output);
         
     }
     
@@ -104,21 +116,30 @@ public class NewGroupAlarm extends Activity {
             e.printStackTrace();
         }
         Button button = (Button)findViewById(R.id.one_shot_group);
-        button.setText(input);
+        //button.setText(input);
         return input;
         
     }
     
     private void getGroups(String input) {
+        GroupList g = new GroupList("error");
         if (input.length() > 0) {
         String [] lines = input.split("\n");
         
         for (String l : lines) {
            if (l.length() > 0 && Character.getNumericValue(l.charAt(0)) >= 0) {
-               
+               g.addContact(l);
+           }
+           else if (l.length() > 0 && Character.getNumericValue(l.charAt(0)) < 0) {
+               if (!g.getName().equals("error")){
+               groups.add(g);
+               }
+               g = new GroupList(l);
            }
         }
+        
         }
+        
     }
     
     private String writeGroupsData() {
@@ -210,7 +231,7 @@ public class NewGroupAlarm extends Activity {
             case 99:
                 String s = getInput("groups");
                 getGroups(s);
-                Button new_group = (Button)findViewById(R.id.new_list);
+                Button new_group = (Button)findViewById(R.id.one_shot_group);
                 new_group.setText(groups.toString());
                 Bundle extras2 = data.getExtras();  
                 ArrayList<String> newGroupNumbers = extras2.getStringArrayList("numbers");
@@ -220,7 +241,7 @@ public class NewGroupAlarm extends Activity {
                 g.addAll(newGroupNumbers);
                 groups.add(g);
                 String o = writeGroupsData();
-                dataview.setText(o);
+                new_group.setText(o);
                 save(o);
                 
           
