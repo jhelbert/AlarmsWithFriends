@@ -21,6 +21,7 @@
         <activity android:name=".NewGroupAlarm"></activity>
         <activity android:name="MyAlarms"></activity>
         <activity android:name=".NewAlarm"></activity>
+        <activity android:name=".ReceivedGroupAlarm"></activity>
         <activity android:name=".ContactPickerActivity"></activity>
 	<receiver android:name=".OneShotAlarm"></receiver>
 	<receiver android:name=".SmsReceiver"> 

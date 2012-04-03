@@ -19,7 +19,7 @@ public class AlarmsWithFriendsActivity extends Activity {
     private Button myAlarms, friendsAlarms, urgentAlarms, settings;
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d("tag1", "msg");
+    
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         myAlarms = (Button) findViewById(R.id.sButton00);

@@ -32,7 +32,7 @@ public class SmsReceiver extends BroadcastReceiver
                 msgs[i] = SmsMessage.createFromPdu((byte[])pdus[i]);                
                 str += msgs[i].getMessageBody().toString();
                 if (str.startsWith("AWF")) {
-                    String alarm = str.split(":")[-1];
+                    String alarm = str.split(":")[1];
                     String[] times = alarm.split(",");
                     Intent in = new Intent(context, AlarmsWithFriendsActivity.class);
                     PendingIntent sender = PendingIntent.getBroadcast(context,
@@ -52,6 +52,7 @@ public class SmsReceiver extends BroadcastReceiver
                     // Schedule the alarm!
                     Intent interpret = new Intent(context, ReceivedGroupAlarm.class);
                     interpret.putExtra("alarmtime", alarm);
+                    interpret.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
                     context.startActivity(interpret);  
                     //AlarmManager am = (AlarmManager)getSystemService("alarm");
                     //am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
