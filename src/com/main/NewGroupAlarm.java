@@ -1,4 +1,5 @@
 package com.main;
+import android.telephony.SmsManager;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuff.Mode;
 import android.app.Activity;
@@ -27,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,6 +40,7 @@ public class NewGroupAlarm extends Activity {
     private static final int CONTACT_PICKER_RESULT = 1001;
     TimePicker alarm_time = null;
     TextView dataview = null;
+    Spinner spin = null;
     
     Calendar calendar = Calendar.getInstance();
     int hours = calendar.get(Calendar.HOUR);
@@ -93,7 +96,7 @@ public class NewGroupAlarm extends Activity {
             
         }
         
-        Spinner spin = (Spinner) findViewById(R.id.spinner1);
+        spin = (Spinner) findViewById(R.id.spinner1);
         spin.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         //save(output);
@@ -195,7 +198,7 @@ public class NewGroupAlarm extends Activity {
             int day = calendar.get(Calendar.DATE);
             int month = calendar.get(Calendar.MONTH);
             calendar.set(year, month, day, hours, mins, 0);
-            
+            String msg = "alarm:" + calendar.toString();
             
 
             // Schedule the alarm!
@@ -205,6 +208,24 @@ public class NewGroupAlarm extends Activity {
             // Tell the user about what we did.
             if (mToast != null) {
                 mToast.cancel();
+            }
+            String selected = "";
+            for (GroupList g : groups) {
+                if (g.getName().equals(spin.getSelectedItem().toString())) {
+                    selected = g.getName();
+                    msg = "AWF " + g.getName() + " alarm:" + year + "," + month + "," + day + "," + hours + "," + mins;
+                    ArrayList<String> contacts = g.getContacts();
+                    PendingIntent sentPI = PendingIntent.getBroadcast(v.getContext(), 0,
+                            new Intent("SMS_SENT"), 0);
+                 
+                        PendingIntent deliveredPI = PendingIntent.getBroadcast(v.getContext(), 0,
+                            new Intent("SMS_DELIVERED"), 0);
+                    for (String phone : contacts) {
+                        SmsManager sms = SmsManager.getDefault();
+                        sms.sendTextMessage(phone, null, msg, sentPI, null); 
+                        
+                    }
+                }
             }
             mToast = Toast.makeText(NewGroupAlarm.this, "Alarm Sent!",
                     Toast.LENGTH_LONG);
