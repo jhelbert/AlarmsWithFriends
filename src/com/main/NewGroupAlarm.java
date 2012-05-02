@@ -37,6 +37,7 @@ import java.util.Set;
 
 public class NewGroupAlarm extends Activity {
     Toast mToast;
+    private SQLiteAdapter mySQLiteAdapter;
     private static final int CONTACT_PICKER_RESULT = 1001;
     TimePicker alarm_time = null;
     TextView dataview = null;
@@ -49,7 +50,7 @@ public class NewGroupAlarm extends Activity {
     @Override
         protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        
         setContentView(R.layout.newgroupalarm);
 
         // Watch for button clicks.
@@ -83,16 +84,18 @@ public class NewGroupAlarm extends Activity {
             
         });
         dataview = (TextView)findViewById(R.id.groupdata);
-        String s = getInput("groups");
-        getGroups(s);
-        String output = writeGroupsData();
-        dataview.setText(output);
+        String s = "";
+
+        mySQLiteAdapter = new SQLiteAdapter(this);
+        mySQLiteAdapter.openToWrite();
+        ArrayList<String> groups = mySQLiteAdapter.getGroups();
+        
         
         ArrayAdapter <CharSequence> adapter =
                 new ArrayAdapter <CharSequence> (this, android.R.layout.simple_spinner_item );
               adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        for (GroupList g : groups) {
-            adapter.add(g.getName());
+        for (String g : groups) {
+            adapter.add(g);
             
         }
         
@@ -103,82 +106,9 @@ public class NewGroupAlarm extends Activity {
         
     }
     
-    private String getInput(String filename) {
-        FileInputStream fis;
-        String input = "";
-        try {
-            fis = openFileInput(filename);
-            byte[] b = new byte[10000];
-            int current = 0;
-            fis.read(b);
-            input = new String(b);
-        } catch (FileNotFoundException e) {
-            Button button = (Button)findViewById(R.id.one_shot_group);
-            button.setText("error1");
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            Button button = (Button)findViewById(R.id.one_shot_group);
-            //button.setText("error2");
-            e.printStackTrace();
-        }
-        //Button button = (Button)findViewById(R.id.one_shot_group);
-        //button.setText(input);
-        return input;
-        
-    }
     
-    private void getGroups(String input) {
-        GroupList g = new GroupList("error");
-        if (input.length() > 0) {
-        String [] lines = input.split("\n");
-        
-        for (String l : lines) {
-           if (l.length() > 0 && Character.getNumericValue(l.charAt(0)) >= 0) {
-               g.addContact(l);
-           }
-           else if (l.length() > 0 && Character.getNumericValue(l.charAt(0)) < 0) {
-               if (!g.getName().equals("error")){
-               groups.add(g);
-               }
-               g = new GroupList(l);
-           }
-        }
-        
-        }
-        
-    }
     
-    private String writeGroupsData() {
-        String output = "";
-        if (groups.size() > 0) {
-        for (GroupList g : groups) {
-            output += g.getName() + "\n";
-            
-            for (String c : g.getContacts()) {
-                output += c + "\n";
-            }
-        }
-        }
-        return output;
-    }
     
-    private void save(String output) {
-        String FILENAME = "groups";
- 
-
-        
-        try {
-            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
-            fos.write(output.getBytes());
-            fos.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
-    }
 
     private OnClickListener mOneShotListener = new OnClickListener() {
         public void onClick(View v) {
@@ -204,17 +134,18 @@ public class NewGroupAlarm extends Activity {
             // Schedule the alarm!
             AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-
+            mySQLiteAdapter = new SQLiteAdapter(getBaseContext());
+            mySQLiteAdapter.openToWrite();
+            mySQLiteAdapter.insertAlarm("", "", hours + ":" + mins);
             // Tell the user about what we did.
             if (mToast != null) {
                 mToast.cancel();
             }
-            String selected = "";
-            for (GroupList g : groups) {
-                if (g.getName().equals(spin.getSelectedItem().toString())) {
-                    selected = g.getName();
-                    msg = "AWF " + g.getName() + " alarm:" + year + "," + month + "," + day + "," + hours + "," + mins;
-                    ArrayList<String> contacts = g.getContacts();
+           
+                    String list = spin.getSelectedItem().toString(); 
+                    
+                    msg = "AWF " + list + " alarm:" + year + "," + month + "," + day + "," + hours + "," + mins;
+                    String[] contacts =mySQLiteAdapter.getNumbers(list).split(",");
                     PendingIntent sentPI = PendingIntent.getBroadcast(v.getContext(), 0,
                             new Intent("SMS_SENT"), 0);
                  
@@ -225,9 +156,9 @@ public class NewGroupAlarm extends Activity {
                         sms.sendTextMessage(phone, null, msg, sentPI, null); 
                         
                     }
-                }
-            }
-            mToast = Toast.makeText(NewGroupAlarm.this, "Alarm Sent!",
+                
+            
+            mToast = Toast.makeText(NewGroupAlarm.this, "Alarm Sent!  " + msg,
                     Toast.LENGTH_LONG);
             mToast.show();
             
@@ -256,8 +187,8 @@ public class NewGroupAlarm extends Activity {
                 //text.setText(extras.toString());
                 break;
             case 99:
-                String s = getInput("groups");
-                getGroups(s);
+                String s = "";
+
                 Button new_group = (Button)findViewById(R.id.one_shot_group);
                 new_group.setText(groups.toString());
                 Bundle extras2 = data.getExtras();  
@@ -278,9 +209,9 @@ public class NewGroupAlarm extends Activity {
                 spin.setAdapter(adapter);
                 g.addAll(newGroupNumbers);
                 groups.add(g);
-                String o = writeGroupsData();
+  
                 //new_group.setText(o);
-                save(o);
+      
                 
           
   

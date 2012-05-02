@@ -47,6 +47,7 @@ public class ReceivedGroupAlarm extends Activity{
             
             AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+            finish();
         }
         
     });

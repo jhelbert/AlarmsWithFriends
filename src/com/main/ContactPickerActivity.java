@@ -26,6 +26,7 @@ public class ContactPickerActivity extends ListActivity {
     private static final int CONTACT_PICKER_RESULT = 1001;
     ArrayList<String> phoneNumbers = new ArrayList<String>();
     ArrayAdapter<String> adapter = null;
+    private SQLiteAdapter mySQLiteAdapter;
     
     EditText name = null;
     
@@ -47,6 +48,14 @@ public class ContactPickerActivity extends ListActivity {
                 bundle.putStringArrayList("numbers", phoneNumbers);
                 bundle.putString("name", name.getText().toString());
                 data.putExtras(bundle);
+                mySQLiteAdapter = new SQLiteAdapter(v.getContext());
+                mySQLiteAdapter.openToWrite();
+                String nums = "";
+                for (String n : phoneNumbers) {
+                    nums += n + ",";
+                }
+                nums = nums.substring(0, nums.length() -1);
+                mySQLiteAdapter.insertList(name.getText().toString(), nums);
 
                 if (getParent() == null) {
                     setResult(Activity.RESULT_OK, data);

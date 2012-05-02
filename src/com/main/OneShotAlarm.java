@@ -24,8 +24,12 @@ public class OneShotAlarm extends BroadcastReceiver
     public void onReceive(Context context, Intent intent)
     {
         Toast.makeText(context, "R.string.one_shot_received", Toast.LENGTH_SHORT).show();
-        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        Ringtone r = RingtoneManager.getRingtone(context, notification);
-        r.play();
+        try {
+       Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+       Ringtone r = RingtoneManager.getRingtone(context, notification);
+        }
+        catch(Exception e) {
+            //ringtone will not work on emulator
+        }
     }
 }
