@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
     <TextView android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:id="@+id/textView3" android:layout_width="291dp" android:text="Settings"></TextView>
-    <TextView android:id="@+id/textView1" android:text="TextView" android:layout_width="305dp" android:layout_height="wrap_content"></TextView>
-    <SeekBar android:layout_height="wrap_content" android:max="15"
+    <TextView android:layout_below="@+id/textView3" android:id="@+id/textView1" android:text="TextView" android:layout_width="305dp" android:layout_height="wrap_content"></TextView>
+    <SeekBar android:layout_below="@+id/textView1" android:layout_height="wrap_content" android:max="15"
    android:progress="5" android:id="@+id/seekBar1" android:layout_width="match_parent"></SeekBar>
-    <TextView android:text="TextView" android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-    <SeekBar android:layout_height="wrap_content" android:max="4"
+    <TextView android:layout_below="@+id/seekBar1" android:text="TextView" android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+    <SeekBar android:layout_below="@+id/textView2" android:layout_height="wrap_content" android:max="4"
    android:progress="2" android:id="@+id/seekBar2" android:layout_width="match_parent"></SeekBar>
-    <TextView android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:id="@+id/contact_disp" android:layout_width="wrap_content" android:text="Backup Contacts"></TextView>
-    <Button android:onClick="doLaunchContactPicker" android:text="Button" android:id="@+id/button1" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-    
-    
-    <ListView
-  android:id="@+id/em_contacts" 
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"/>
-</LinearLayout>
+    <TextView android:layout_below="@+id/seekBar2" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:id="@+id/contact_disp" android:layout_width="wrap_content" android:text="Backup Contacts"></TextView>
+    <Button android:layout_below="@+id/seekBar2" android:layout_toRightOf="@+id/contact_disp" android:onClick="doLaunchContactPicker" android:text="Add New" android:id="@+id/button1" android:layout_width="wrap_content" android:layout_height="50px"></Button>
+    <ListView android:layout_below="@+id/contact_disp" android:layout_height="match_parent" android:layout_width="wrap_content" android:id="@+id/em_contacts" android:layout_alignParentLeft="true"></ListView>
+</RelativeLayout>

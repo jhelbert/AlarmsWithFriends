@@ -26,18 +26,22 @@ public class Settings extends Activity {
     ArrayAdapter<String> adapter = null;
     private Button newAlarm;
     SQLiteAdapter mySQLiteAdapter;
+    
     private static final int CONTACT_PICKER_RESULT = 1001;
-
+    ArrayList<String> values = new ArrayList<String>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
-           
+        appPrefs = new AppPreferences(getApplicationContext());
 
         final TextView snoozeTimeDisp = (TextView) findViewById(R.id.textView1);
         final SeekBar snoozeTime = (SeekBar) findViewById(R.id.seekBar1);
-        final ListView contacts = (ListView) findViewById(R.id.em_contacts);
-        appPrefs = new AppPreferences(getApplicationContext());
+        snoozeTimeDisp.setText("Snooze Time: " + appPrefs.getSnoozeTime());
+        snoozeTime.setProgress(Integer.parseInt(appPrefs.getSnoozeTime()));
+        
+        
+        refresh();
         //appPrefs.saveEmContacts("");
         snoozeTime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -48,6 +52,10 @@ public class Settings extends Activity {
                         snoozeTimeDisp.setText("Snooze Time: " + progress);
                        
                         appPrefs.saveSnoozeTime(Integer.toString(progress));
+                        String k = appPrefs.getSnoozeTime();
+                        int j = Integer.parseInt(k);
+                        int x = 3;
+                        
                     }
 
                     @Override
@@ -61,6 +69,14 @@ public class Settings extends Activity {
         
         final TextView snoozeCountDisp = (TextView) findViewById(R.id.textView2);
         final SeekBar snoozeCount = (SeekBar) findViewById(R.id.seekBar2);
+        
+        int count = Integer.parseInt(appPrefs.getSnoozeCount()) - 1;
+        snoozeCountDisp.setText("Snooze Count: " + count);
+        snoozeCount.setProgress(count);
+        
+        Button button = (Button)findViewById(R.id.button1);
+        button.setTextSize(8);
+        //button.setPadding(50, 0, 0, 0);
 
         snoozeCount.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -91,25 +107,11 @@ public class Settings extends Activity {
         
         
         
-        ArrayList<String> values = new ArrayList<String>();
-        //values.add(" ");
-        String info = appPrefs.getEmContacts();
-        if (info.equals("")) {
-            
-        }
-        else {
-            
-            String [] temp = info.split("!!");
-            snoozeCountDisp.setText(Integer.toString(temp.length));
-            for (String t : temp) {
-                values.add(t.split("\\|")[0]);
-                //Toast.makeText(getApplicationContext(), t, Toast.LENGTH_SHORT).show();
-            }
-        }
         
-        adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, values);
-        contacts.setAdapter(adapter);
+        //values.add(" ");
+        
+        
+        
     
     }
     public void doLaunchContactPicker(View view) {  
@@ -154,8 +156,7 @@ public class Settings extends Activity {
                             while (pCur.moveToNext()) {
                                 String number = pCur.getString(
                                         pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                                adapter.add(name);
-                                adapter.notifyDataSetChanged();
+                                
                                 ans = name + "|" + number;
                                 
                             } 
@@ -170,7 +171,7 @@ public class Settings extends Activity {
                 else {
                     appPrefs.saveEmContacts(s + "!!" + ans);
                 }
-                
+                refresh();
                 Toast.makeText(getBaseContext(), appPrefs.getEmContacts(), Toast.LENGTH_SHORT).show();
   
             }  
@@ -179,5 +180,25 @@ public class Settings extends Activity {
             // gracefully handle failure  
             
         }  
-    }  
+    }
+    
+    public void refresh() {
+        ListView contacts = (ListView) findViewById(R.id.em_contacts);
+        String info = appPrefs.getEmContacts();
+        if (info.equals("")) {
+            
+        }
+        else {
+            
+            String [] temp = info.split("!!");
+            //snoozeCountDisp.setText(Integer.toString(temp.length));
+            for (String t : temp) {
+                values.add(t.split("\\|")[0]);
+                //Toast.makeText(getApplicationContext(), t, Toast.LENGTH_SHORT).show();
+            }
+        }
+        adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, values);
+        contacts.setAdapter(adapter);
+    }
     }

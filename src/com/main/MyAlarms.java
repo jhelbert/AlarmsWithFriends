@@ -43,9 +43,22 @@ public class MyAlarms extends Activity {
           public void onItemClick(AdapterView<?> parent, View view,
               int position, long id) {
             // When clicked, show a toast with the TextView text
-            Toast.makeText(getApplicationContext(), ((TextView) view).getText(),
-                Toast.LENGTH_SHORT).show();
-            mySQLiteAdapter.deleteAlarm(((TextView) view).getText().toString());
+            
+            String time = ((TextView) view).getText().toString();
+            String[] parts = time.split(" ");
+            String mode = parts[1]; 
+            int hrs = Integer.parseInt(parts[0].split(":")[0]);
+            int mins = Integer.parseInt(parts[0].split(":")[1]);
+            if (mode.equals("PM")) {
+                hrs = (hrs + 12);
+            }
+            if (mode.equals("AM") && hrs == 12) {
+                hrs = 0;
+            }
+            time = hrs + ":" + mins;
+            Toast.makeText(getApplicationContext(), time,
+                    Toast.LENGTH_SHORT).show();
+            mySQLiteAdapter.deleteAlarm(time);
             refresh();
           }
         });
@@ -88,8 +101,24 @@ public class MyAlarms extends Activity {
             mySQLiteAdapter.openToWrite();
             
             ArrayList<String>alarms = mySQLiteAdapter.queueAllMain();
+            ArrayList<String>ed_alarms = new ArrayList<String>();
+            for (String s : alarms) {
+                String result = "";
+                String[] tokens = s.split(":");
+                int hrs = Integer.parseInt(tokens[0]);
+                int mins = Integer.parseInt(tokens[1]);
+                if (hrs == 0) {
+                    result = "12:" + mins + " AM";
+                }
+                
+                else if (hrs > 12) {
+                    hrs -= 12;
+                    result = hrs + ":" + mins + " PM";
+                }
+                ed_alarms.add(result);
+            }
             adapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_1, alarms);
+                    android.R.layout.simple_list_item_1, ed_alarms);
             lv.setAdapter(adapter);
             }
             catch(Exception e) {

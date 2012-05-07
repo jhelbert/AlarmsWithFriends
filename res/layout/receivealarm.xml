@@ -4,7 +4,7 @@
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
-    <TextView android:layout_width="wrap_content" android:id="@+id/AcceptAlarmDIsplay" android:textAppearance="?android:attr/textAppearanceLarge" android:text="Alarm Time" android:layout_height="wrap_content"></TextView>
+    <TextView android:layout_width="wrap_content" android:id="@+id/AcceptAlarmDisplay" android:textAppearance="?android:attr/textAppearanceLarge" android:text="Alarm Time" android:layout_height="wrap_content"></TextView>
     <Button android:layout_width="wrap_content" android:id="@+id/accept" android:layout_height="wrap_content" android:text="Accept"></Button>
     <Button android:layout_width="wrap_content" android:id="@+id/dismiss" android:text="Dismiss" android:layout_height="wrap_content"></Button>
     <Button android:layout_width="wrap_content" android:id="@+id/maintabs" android:text="Main" android:layout_height="wrap_content"></Button>

@@ -30,7 +30,7 @@ public class ReceivedGroupAlarm extends Activity{
     final int day = Integer.parseInt(times[2]);
     final int hours = Integer.parseInt(times[3]);
     final int mins = Integer.parseInt(times[4]);
-    TextView display = (TextView)findViewById(R.id.AcceptAlarmDIsplay);
+    TextView display = (TextView)findViewById(R.id.AcceptAlarmDisplay);
 
     String month_str =   new DateFormatSymbols().getMonths()[month-1];
     display.setText("New Alarm for " + hours + ":" + mins + " on " + month_str + " " + day + ", " + year + "?");

@@ -1,5 +1,6 @@
 package com.main;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -38,16 +39,27 @@ public class AlarmDialog extends Activity{
         final int mins = calendar.get(Calendar.MINUTE);
         appPrefs = new AppPreferences(getApplicationContext());
         //appPrefs.saveSmsBody("testing");
-        
+        final int snoozeTime = Integer.parseInt(appPrefs.getSnoozeTime());
         Button snooze = (Button)findViewById(R.id.alarmsnooze);
+        String contactText = "Wake me up";
         snooze.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
                 HashMap<String,String> info = mySQLiteAdapter.getInfo(hours+ ":" + mins);
-                int snooze = Integer.parseInt(info.get("snooze")) - 1;
+                int snooze;
+                try {
+                snooze = Integer.parseInt(info.get("snooze")) - 1;
+                }
+                catch (Exception e) {
+                    snooze = 2;
+                }
+                if (snooze == 0) {
+                    ArrayList<String>numbers = new ArrayList<String>();
+                }
                 mySQLiteAdapter.deleteAlarm(hours + ":" + mins);
-                calendar.add(Calendar.MINUTE, 2);
+                
+                calendar.add(Calendar.MINUTE, snoozeTime);
                 final int snooze_hours = calendar.get(Calendar.HOUR_OF_DAY);
                 final int snooze_mins = calendar.get(Calendar.MINUTE);
                 mySQLiteAdapter.insertAlarm("", "", snooze_hours + ":" + snooze_mins, Integer.toString(snooze));
