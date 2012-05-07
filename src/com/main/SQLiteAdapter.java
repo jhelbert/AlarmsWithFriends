@@ -1,6 +1,7 @@
 package com.main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,13 +11,36 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
 public class SQLiteAdapter {
+    public HashMap<String,String> getInfo(String time) {
+        HashMap<String,String> info = new HashMap<String,String>();
+        String[] columns = new String[]{SETTER, TIME, ALARM_DESC, SNOOZE};
+        Cursor cursor = sqLiteDatabase.query(MYDATABASE_TABLE, columns, 
+                null, null, null, null, null);
+        int index_SETTER = cursor.getColumnIndex(SETTER);
+        int index_DESC = cursor.getColumnIndex(ALARM_DESC);
+        int index_TIME = cursor.getColumnIndex(TIME);
+        int index_SNOOZE = cursor.getColumnIndex(SNOOZE);
+        ArrayList<String> not = new ArrayList<String>();
+        for(cursor.moveToFirst(); !(cursor.isAfterLast()); cursor.moveToNext()){
+            if (cursor.getString(index_TIME).equals(time)) {
+            info.put("setter", cursor.getString(index_SETTER));
+            info.put("desc", cursor.getString(index_DESC));
+            info.put("snooze", cursor.getString(index_SNOOZE));
+            }
+            else {
+                not.add(cursor.getString(index_TIME));
+            }
+           }
+        return info;
+    }
 
- public static final String MYDATABASE_NAME = "MY_Daat178";
+ public static final String MYDATABASE_NAME = "MY_Daat1782";
  public static final String MYDATABASE_TABLE = "MY_TABLE";
  public static final int MYDATABASE_VERSION = 1;
  public static final String SETTER = "Setter";
  public static final String TIME = "Time";
  public static final String ALARM_DESC = "Desc";
+ public static final String SNOOZE = "Snooze";
  
  public static final String LIST_TABLE = "LIST_TABLE";
  public static final String LIST_NAME = "List_name";
@@ -25,7 +49,7 @@ public class SQLiteAdapter {
  //create table MY_DATABASE (ID integer primary key, Content text not null);
  private static final String SCRIPT_CREATE_DATABASE =
   "create table " + MYDATABASE_TABLE + " ("
-  + SETTER + " text not null, " + ALARM_DESC + " text not null, " + TIME + " text not null);";
+  + SETTER + " text not null, " + ALARM_DESC + " text not null, " + TIME + " text not null, " + SNOOZE + " text not null);";
  
  private static final String SCRIPT_CREATE_LISTS =
          "create table " + LIST_TABLE + " ("
@@ -62,8 +86,19 @@ public class SQLiteAdapter {
   contentValues.put(SETTER, setter);
   contentValues.put(ALARM_DESC, description);
   contentValues.put(TIME, time);
+  contentValues.put(SNOOZE, "3");
   return sqLiteDatabase.insert(MYDATABASE_TABLE, null, contentValues);
  }
+ 
+ public long insertAlarm(String setter, String description, String time, String snooze){
+     
+     ContentValues contentValues = new ContentValues();
+     contentValues.put(SETTER, setter);
+     contentValues.put(ALARM_DESC, description);
+     contentValues.put(TIME, time);
+     contentValues.put(SNOOZE, snooze);
+     return sqLiteDatabase.insert(MYDATABASE_TABLE, null, contentValues);
+    }
  
  public long insertList(String list, String numbers){
      
@@ -80,6 +115,12 @@ public class SQLiteAdapter {
  public int deleteLists(){
      return sqLiteDatabase.delete(LIST_TABLE, null, null);
     }
+ 
+ public int deleteAlarm(String time) {
+     return sqLiteDatabase.delete(MYDATABASE_TABLE, TIME+" = '"+time + "'", null);
+ }
+ 
+ 
  
  public ArrayList<String> queueAllMain(){
      String[] columns = new String[]{SETTER,TIME};
@@ -130,6 +171,8 @@ public class SQLiteAdapter {
         }
      return result;
  }
+ 
+ 
  
  
  public String queueAllLists(){

@@ -124,6 +124,11 @@ public class NewGroupAlarm extends Activity {
 
           
             Date date = new Date();
+            
+            if ((calendar.get(Calendar.HOUR_OF_DAY) > hours)) {
+                calendar.add(Calendar.DATE, 1);
+            }
+            
             int year = calendar.get(Calendar.YEAR);
             int day = calendar.get(Calendar.DATE);
             int month = calendar.get(Calendar.MONTH);

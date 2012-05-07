@@ -24,16 +24,14 @@ public class AlarmsWithFriendsActivity extends Activity {
         setContentView(R.layout.main);
         myAlarms = (Button) findViewById(R.id.sButton00);
         friendsAlarms = (Button) findViewById(R.id.sButton01);
-        urgentAlarms = (Button) findViewById(R.id.sButton02);
-        settings = (Button) findViewById(R.id.sButton03);
+        
         
         myAlarms.setOnTouchListener(new OnTouchListener() {
 
             @Override
             public boolean onTouch(View arg0, MotionEvent arg1) {
-                System.out.println( "aaa");
-                Log.d("tag", "msg");
-                Intent intent = new Intent(AlarmsWithFriendsActivity.this, MyAlarms.class);
+                
+                Intent intent = new Intent(AlarmsWithFriendsActivity.this, NewAlarm.class);
    
                 startActivity(intent);
                 
@@ -48,9 +46,8 @@ public class AlarmsWithFriendsActivity extends Activity {
 
             @Override
             public boolean onTouch(View arg0, MotionEvent arg1) {
-                System.out.println( "aaa");
-                Log.d("tag", "msg");
-                Intent intent = new Intent(AlarmsWithFriendsActivity.this, GroupAlarms.class);
+                
+                Intent intent = new Intent(AlarmsWithFriendsActivity.this, NewGroupAlarm.class);
    
                 startActivity(intent);
                 

@@ -16,6 +16,7 @@ import android.widget.Toast;
 public class ReceivedGroupAlarm extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+       
     super.onCreate(savedInstanceState);
     String alarm = getIntent().getExtras().getString("alarmtime");
     setContentView(R.layout.receivealarm);
@@ -47,6 +48,9 @@ public class ReceivedGroupAlarm extends Activity{
             
             AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+            SQLiteAdapter mySQLiteAdapter = new SQLiteAdapter(getBaseContext());
+            mySQLiteAdapter.openToWrite();
+            mySQLiteAdapter.insertAlarm("", "", hours + ":" + mins);
             finish();
         }
         
@@ -58,6 +62,18 @@ public class ReceivedGroupAlarm extends Activity{
         public void onClick(View v) {
             finish();
             
+        }
+        
+    });
+    
+    Button main = (Button)findViewById(R.id.maintabs);
+    main.setOnClickListener(new OnClickListener() {
+
+        @Override
+        public void onClick(View arg0) {
+            Intent intent = new Intent(ReceivedGroupAlarm.this, Tabs.class);
+            
+            startActivity(intent);
         }
         
     });

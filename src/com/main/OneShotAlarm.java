@@ -1,5 +1,8 @@
 package com.main;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.BroadcastReceiver;
@@ -20,10 +23,11 @@ import android.widget.Toast;
  */
 public class OneShotAlarm extends BroadcastReceiver
 {
+    private SQLiteAdapter mySQLiteAdapter;
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        Toast.makeText(context, "R.string.one_shot_received", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "R.string.one_shot_received", Toast.LENGTH_SHORT).show();
         try {
        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
        Ringtone r = RingtoneManager.getRingtone(context, notification);
@@ -31,5 +35,10 @@ public class OneShotAlarm extends BroadcastReceiver
         catch(Exception e) {
             //ringtone will not work on emulator
         }
+        
+        Intent i = new Intent(context, AlarmDialog.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+        
     }
 }

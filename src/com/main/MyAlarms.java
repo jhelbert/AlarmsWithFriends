@@ -13,17 +13,23 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class MyAlarms extends ListActivity {
+public class MyAlarms extends Activity {
     /** Called when the activity is first created. */
     ArrayAdapter<String> adapter = null;
     private Button newAlarm;
     SQLiteAdapter mySQLiteAdapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.myalarms);
         
         ArrayList<String> values = new ArrayList<String>();
         //values.add(" ");
@@ -31,36 +37,35 @@ public class MyAlarms extends ListActivity {
         mySQLiteAdapter.openToWrite();
         
         ArrayList<String>alarms = mySQLiteAdapter.queueAllMain();
-        try {
+        ListView lv = (ListView) findViewById(R.id.listview);
+
+        lv.setOnItemClickListener(new OnItemClickListener() {
+          public void onItemClick(AdapterView<?> parent, View view,
+              int position, long id) {
+            // When clicked, show a toast with the TextView text
+            Toast.makeText(getApplicationContext(), ((TextView) view).getText(),
+                Toast.LENGTH_SHORT).show();
+            mySQLiteAdapter.deleteAlarm(((TextView) view).getText().toString());
+            refresh();
+          }
+        });
         adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, alarms);
-        setListAdapter(adapter);
-        }
-        catch(Exception e) {
-            
-        }
+        lv.setAdapter(adapter);
+        
+        
+        
         
         
         
         
         String FILENAME = "myalarms";
         FileInputStream fis;
-        try {
-            fis = openFileInput(FILENAME);
-            byte[] b = new byte[1000];
-            int current = 0;
-            fis.read(b);
-            String s = new String(b);
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        
     
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.myalarms);
+        
+        
+        
         newAlarm = (Button)findViewById(R.id.newMyAlarm);
         newAlarm.setOnClickListener(new OnClickListener() {
 
@@ -75,5 +80,20 @@ public class MyAlarms extends ListActivity {
         });
         
         
+    }
+    public void refresh() {
+        ListView lv = (ListView) findViewById(R.id.listview);
+        try {
+            mySQLiteAdapter = new SQLiteAdapter(this);
+            mySQLiteAdapter.openToWrite();
+            
+            ArrayList<String>alarms = mySQLiteAdapter.queueAllMain();
+            adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_1, alarms);
+            lv.setAdapter(adapter);
+            }
+            catch(Exception e) {
+                
+            }
     }
 }
