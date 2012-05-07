@@ -33,12 +33,31 @@ public class SQLiteAdapter {
            }
         return info;
     }
+    
+    public Boolean alarmActive(String time) {
+        boolean found = false;
+        String[] columns = new String[]{SETTER, TIME, ALARM_DESC, SNOOZE};
+        Cursor cursor = sqLiteDatabase.query(MYDATABASE_TABLE, columns, 
+                null, null, null, null, null);
+        int index_SETTER = cursor.getColumnIndex(SETTER);
+        int index_DESC = cursor.getColumnIndex(ALARM_DESC);
+        int index_TIME = cursor.getColumnIndex(TIME);
+        
+        for(cursor.moveToFirst(); !(cursor.isAfterLast()); cursor.moveToNext()){
+            if (cursor.getString(index_TIME).equals(time)) {
+                found = true;
+            }
+            
+           }
+        return found;
+    }
 
  public static final String MYDATABASE_NAME = "MY_Daat1782";
  public static final String MYDATABASE_TABLE = "MY_TABLE";
  public static final int MYDATABASE_VERSION = 1;
  public static final String SETTER = "Setter";
  public static final String TIME = "Time";
+ public static final String SNOOZE = "Snooze";
  public static final String ALARM_DESC = "Desc";
  public static final String SNOOZE = "Snooze";
  

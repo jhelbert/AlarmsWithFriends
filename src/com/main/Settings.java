@@ -8,11 +8,13 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -73,9 +75,22 @@ public class Settings extends Activity {
         int count = Integer.parseInt(appPrefs.getSnoozeCount()) - 1;
         snoozeCountDisp.setText("Snooze Count: " + count);
         snoozeCount.setProgress(count);
+        Button clear = (Button)findViewById(R.id.clear_em);
+        clear.getBackground().setColorFilter(0xFFFF0000, PorterDuff.Mode.MULTIPLY);
         
+        clear.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                appPrefs.saveEmContacts("");
+                refresh();
+                
+            }
+            
+        });
         Button button = (Button)findViewById(R.id.button1);
-        button.setTextSize(8);
+        button.setTextSize(9);
+        button.getBackground().setColorFilter(0xFF00FF00, PorterDuff.Mode.MULTIPLY);
         //button.setPadding(50, 0, 0, 0);
 
         snoozeCount.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -138,6 +153,8 @@ public class Settings extends Activity {
                 person = extras.get("android.intent.extra.shortcut.NAME").toString();
                 Uri result = data.getData(); 
                 String ans = "";
+                String name = "";
+                String number = "";
                 ContentResolver cr = getContentResolver();
                 Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
                         null, null, null, null);
@@ -145,7 +162,7 @@ public class Settings extends Activity {
                 while (cur.moveToNext()) {
                     String id = cur.getString(
                                 cur.getColumnIndex(ContactsContract.Contacts._ID));
-                String name = cur.getString(
+                name = cur.getString(
                                 cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0 && person.equals(name)) {
                     Cursor pCur = cr.query(
@@ -154,7 +171,7 @@ public class Settings extends Activity {
                             ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?", 
                             new String[]{id}, null);
                             while (pCur.moveToNext()) {
-                                String number = pCur.getString(
+                                number = pCur.getString(
                                         pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                                 
                                 ans = name + "|" + number;
@@ -165,6 +182,7 @@ public class Settings extends Activity {
                    }
             }
                 String s = appPrefs.getEmContacts();
+                if (!(s.contains(name) && s.contains(number))) {
                 if (s.equals("")) {
                     appPrefs.saveEmContacts(ans);
                 }
@@ -173,6 +191,10 @@ public class Settings extends Activity {
                 }
                 refresh();
                 Toast.makeText(getBaseContext(), appPrefs.getEmContacts(), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getBaseContext(), "That contact is already here", Toast.LENGTH_SHORT).show();
+                }
   
             }  
       
@@ -186,7 +208,10 @@ public class Settings extends Activity {
         ListView contacts = (ListView) findViewById(R.id.em_contacts);
         String info = appPrefs.getEmContacts();
         if (info.equals("")) {
-            
+            values = new ArrayList<String>();
+            adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_1, values);
+            contacts.setAdapter(adapter);
         }
         else {
             

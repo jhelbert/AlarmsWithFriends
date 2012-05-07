@@ -28,6 +28,7 @@
         android:text="alarm_controller"/>
    <Button android:layout_weight="0" android:text="one_shot_alarm" android:id="@+id/one_shot" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
     <TimePicker android:layout_weight="0" android:id="@+id/timePicker1" android:layout_width="wrap_content" android:layout_height="wrap_content"></TimePicker>
+    <DatePicker android:layout_width="wrap_content" android:layout_weight="0" android:layout_height="wrap_content" android:id="@+id/datePicker1"></DatePicker>
     
     
 

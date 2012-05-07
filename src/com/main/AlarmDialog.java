@@ -13,6 +13,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -38,10 +39,10 @@ public class AlarmDialog extends Activity{
         final int hours = calendar.get(Calendar.HOUR_OF_DAY);
         final int mins = calendar.get(Calendar.MINUTE);
         appPrefs = new AppPreferences(getApplicationContext());
-        //appPrefs.saveSmsBody("testing");
+        
         final int snoozeTime = Integer.parseInt(appPrefs.getSnoozeTime());
         Button snooze = (Button)findViewById(R.id.alarmsnooze);
-        String contactText = "Wake me up";
+        final String contactText = "Wake me up";
         snooze.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -54,8 +55,29 @@ public class AlarmDialog extends Activity{
                 catch (Exception e) {
                     snooze = 2;
                 }
-                if (snooze == 0) {
+                if (snooze <= 0) {
                     ArrayList<String>numbers = new ArrayList<String>();
+                    String[] contacts = appPrefs.getEmContacts().split("!!");
+                    for (String c : contacts) {
+                        numbers.add(c.split("\\|")[1]);
+                        //Toast.makeText(arg0.getContext(), numbers.toString(), Toast.LENGTH_LONG).show();
+                        
+                    }
+                    
+                    
+                    PendingIntent sentPI = PendingIntent.getBroadcast(getBaseContext(), 0,
+                            new Intent("SMS_SENT"), 0);
+                 
+                        PendingIntent deliveredPI = PendingIntent.getBroadcast(getBaseContext(), 0,
+                            new Intent("SMS_DELIVERED"), 0);
+                    for (String phone : numbers) {
+                        SmsManager sms = SmsManager.getDefault();
+                        sms.sendTextMessage(phone, null, contactText, sentPI, null); 
+                        
+                    }
+                
+            
+            
                 }
                 mySQLiteAdapter.deleteAlarm(hours + ":" + mins);
                 

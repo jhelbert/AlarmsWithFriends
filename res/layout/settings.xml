@@ -14,4 +14,5 @@
     <TextView android:layout_below="@+id/seekBar2" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_height="wrap_content" android:id="@+id/contact_disp" android:layout_width="wrap_content" android:text="Backup Contacts"></TextView>
     <Button android:layout_below="@+id/seekBar2" android:layout_toRightOf="@+id/contact_disp" android:onClick="doLaunchContactPicker" android:text="Add New" android:id="@+id/button1" android:layout_width="wrap_content" android:layout_height="50px"></Button>
     <ListView android:layout_below="@+id/contact_disp" android:layout_height="match_parent" android:layout_width="wrap_content" android:id="@+id/em_contacts" android:layout_alignParentLeft="true"></ListView>
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/clear_em" android:text="CLEAR" android:layout_alignBottom="@+id/button1" android:layout_toRightOf="@+id/button1" android:layout_alignTop="@+id/button1"></Button>
 </RelativeLayout>

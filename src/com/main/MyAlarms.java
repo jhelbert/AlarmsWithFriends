@@ -79,18 +79,6 @@ public class MyAlarms extends Activity {
         
         
         
-        newAlarm = (Button)findViewById(R.id.newMyAlarm);
-        newAlarm.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-                Intent intent = new Intent(MyAlarms.this, NewAlarm.class);
-                
-                startActivity(intent);
-                
-            }
-            
-        });
         
         
     }
@@ -115,7 +103,9 @@ public class MyAlarms extends Activity {
                     hrs -= 12;
                     result = hrs + ":" + mins + " PM";
                 }
+                if (!result.equals("")) {
                 ed_alarms.add(result);
+                }
             }
             adapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_list_item_1, ed_alarms);

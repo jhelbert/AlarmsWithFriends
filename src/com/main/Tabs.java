@@ -24,14 +24,14 @@ public class Tabs extends TabActivity {
         intent = new Intent().setClass(this, MyAlarms.class);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
-        spec = tabHost.newTabSpec("artists").setIndicator("My BBB",
+        spec = tabHost.newTabSpec("artists").setIndicator("My Alarms",
                           res.getDrawable(R.drawable.ic_tab_artists))
                       .setContent(intent);
         tabHost.addTab(spec);
 
         // Do the same for the other tabs
         intent = new Intent().setClass(this, AlarmsWithFriendsActivity.class);
-        spec = tabHost.newTabSpec("albums").setIndicator("New Alarms",
+        spec = tabHost.newTabSpec("albums").setIndicator("Set New Alarm",
                           res.getDrawable(R.drawable.ic_tab_artists))
                       .setContent(intent);
         tabHost.addTab(spec);
@@ -44,6 +44,9 @@ public class Tabs extends TabActivity {
         
         MyAlarms myalarms = (MyAlarms)getLocalActivityManager().getActivity(TAG_B); 
         myalarms.refresh();
+        SQLiteAdapter mySQLiteAdapter = new SQLiteAdapter(getBaseContext());
+        mySQLiteAdapter.openToWrite();
+        //mySQLiteAdapter.deleteAll();
         
         tabHost.setOnTabChangedListener(new OnTabChangeListener() {
 

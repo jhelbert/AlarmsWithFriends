@@ -29,7 +29,11 @@ public class OneShotAlarm extends BroadcastReceiver
     {
         Calendar calendar = Calendar.getInstance();
         int hrs = calendar.get(Calendar.HOUR_OF_DAY);
-        int mins = calendar.get(Calendar.HOUR_OF_DAY);
+        int mins = calendar.get(Calendar.MINUTE);
+        mySQLiteAdapter = new SQLiteAdapter(context);
+        mySQLiteAdapter.openToWrite();
+        boolean found = mySQLiteAdapter.alarmActive(hrs + ":" + mins);
+        if (found) {
         //Toast.makeText(context, "R.string.one_shot_received", Toast.LENGTH_SHORT).show();
         try {
        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
@@ -42,6 +46,7 @@ public class OneShotAlarm extends BroadcastReceiver
         Intent i = new Intent(context, AlarmDialog.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
+        }
         
     }
 }

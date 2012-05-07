@@ -28,10 +28,13 @@ public class NewAlarm extends Activity {
     Calendar calendar = Calendar.getInstance();
     int hours = calendar.get(Calendar.HOUR);
     int mins = calendar.get(Calendar.MINUTE);
+    protected AppPreferences appPrefs;
 
     @Override
         protected void onCreate(Bundle savedInstanceState) {
+        
         super.onCreate(savedInstanceState);
+        appPrefs = new AppPreferences(getApplicationContext());
 
         setContentView(R.layout.newalarm);
 
@@ -75,12 +78,16 @@ public class NewAlarm extends Activity {
             
 
             // Schedule the alarm!
-            AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-            am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+            
             
             SQLiteAdapter mySQLiteAdapter = new SQLiteAdapter(getBaseContext());
             mySQLiteAdapter.openToWrite();
-            mySQLiteAdapter.insertAlarm("", "", hours + ":" + mins);
+            appPrefs.saveSnoozeCount(Integer.toString(Integer.parseInt(appPrefs.getSnoozeCount())));
+            
+            mySQLiteAdapter.insertAlarm("", "", hours + ":" + mins, appPrefs.getSnoozeCount());
+            
+            AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+            am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
 
             // Tell the user about what we did.
             if (mToast != null) {
