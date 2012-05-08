@@ -76,6 +76,7 @@ public class ContactPickerActivity extends ListActivity {
         setListAdapter(adapter);
     
     }
+    
     public void doLaunchContactPicker(View view) {  
         Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,  
                 Contacts.CONTENT_URI);  

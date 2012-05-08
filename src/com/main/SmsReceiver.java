@@ -33,6 +33,7 @@ public class SmsReceiver extends BroadcastReceiver
                 str += msgs[i].getMessageBody().toString();
                 if (str.startsWith("AWF")) {
                     String alarm = str.split(":")[1];
+                    String desc = str.split(":")[2];
                     String[] times = alarm.split(",");
                     Intent in = new Intent(context, AlarmsWithFriendsActivity.class);
                     PendingIntent sender = PendingIntent.getBroadcast(context,
@@ -52,6 +53,7 @@ public class SmsReceiver extends BroadcastReceiver
                     // Schedule the alarm!
                     Intent interpret = new Intent(context, ReceivedGroupAlarm.class);
                     interpret.putExtra("alarmtime", alarm);
+                    interpret.putExtra("desc", desc);
                     interpret.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
                     context.startActivity(interpret);  
                     //AlarmManager am = (AlarmManager)getSystemService("alarm");

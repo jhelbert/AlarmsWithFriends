@@ -17,19 +17,16 @@
 <!-- Demonstrates starting and stopping a local service.
      See corresponding Java code com.android.sdk.app.LocalSerice.java. -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:padding="4dip"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:padding="4dip"
     android:gravity="center_horizontal"
     android:layout_width="match_parent" android:layout_height="match_parent">
-
-    <TextView
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:paddingBottom="4dip"
-        android:text="alarm_controller"/>
-   <Button android:layout_weight="0" android:text="one_shot_alarm" android:id="@+id/one_shot" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-    <TimePicker android:layout_weight="0" android:id="@+id/timePicker1" android:layout_width="wrap_content" android:layout_height="wrap_content"></TimePicker>
-    <DatePicker android:layout_width="wrap_content" android:layout_weight="0" android:layout_height="wrap_content" android:id="@+id/datePicker1"></DatePicker>
+    <DatePicker android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/datePicker1" android:layout_above="@+id/one_shot" android:layout_centerHorizontal="true"></DatePicker>
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/one_shot" android:text="Set Alarm" android:layout_alignParentBottom="true" android:layout_marginBottom="33dp" android:layout_alignParentRight="true" android:layout_alignLeft="@+id/alarm_description"></Button>
+    <TimePicker android:layout_height="wrap_content" android:id="@+id/timePicker1" android:layout_width="wrap_content" android:layout_centerHorizontal="true" android:layout_marginTop="33dp"></TimePicker>
+    <EditText android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/alarm_description" android:layout_alignTop="@+id/datePicker1" android:layout_centerHorizontal="true" android:layout_marginTop="30dp"></EditText>
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/dateButton2" android:text="Select Date" android:layout_above="@+id/datePicker1" android:layout_alignRight="@+id/timePicker1" android:layout_marginRight="16dp"></Button>
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/descButton2" android:text="Description" android:layout_alignBaseline="@+id/dateButton2" android:layout_alignBottom="@+id/dateButton2" android:layout_alignLeft="@+id/timePicker1"></Button>
     
     
 
-</LinearLayout>
+</RelativeLayout>

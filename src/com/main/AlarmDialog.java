@@ -21,13 +21,17 @@ import android.widget.Toast;
 
 public class AlarmDialog extends Activity{
     protected AppPreferences appPrefs;
+    Ringtone r;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alarmdialog);
       //Toast.makeText(context, "R.string.one_shot_received", Toast.LENGTH_SHORT).show();
         try {
        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-       Ringtone r = RingtoneManager.getRingtone(getBaseContext(), notification);
+       r = RingtoneManager.getRingtone(getBaseContext(), notification);
+       r.play();
+       
+       
         }
         catch(Exception e) {
             //ringtone will not work on emulator
@@ -80,11 +84,12 @@ public class AlarmDialog extends Activity{
             
                 }
                 mySQLiteAdapter.deleteAlarm(hours + ":" + mins);
-                
+                int true_month = calendar.get(Calendar.MONTH) + 1;
+                String date =  true_month + "-" + calendar.get(Calendar.DATE) + "-" + calendar.get(Calendar.YEAR);
                 calendar.add(Calendar.MINUTE, snoozeTime);
                 final int snooze_hours = calendar.get(Calendar.HOUR_OF_DAY);
                 final int snooze_mins = calendar.get(Calendar.MINUTE);
-                mySQLiteAdapter.insertAlarm("", "", snooze_hours + ":" + snooze_mins, Integer.toString(snooze));
+                mySQLiteAdapter.insertAlarm("", "", snooze_hours + ":" + snooze_mins, Integer.toString(snooze), date);
                 Intent intent = new Intent(AlarmDialog.this, OneShotAlarm.class);
                 PendingIntent sender = PendingIntent.getBroadcast(AlarmDialog.this,
                         0, intent, 0);
@@ -94,6 +99,7 @@ public class AlarmDialog extends Activity{
                 
                 
                 Toast.makeText(arg0.getContext(), snooze_hours + ":" + snooze_mins + "\t" + snooze, Toast.LENGTH_SHORT).show();
+                r.stop();
                 finish();
             }
             
@@ -105,6 +111,7 @@ public class AlarmDialog extends Activity{
             @Override
             public void onClick(View arg0) {
                 mySQLiteAdapter.deleteAlarm(hours + ":" + mins);
+                r.stop();
                 finish();
                 
             }

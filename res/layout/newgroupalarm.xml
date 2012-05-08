@@ -21,10 +21,18 @@
     android:gravity="center_horizontal"
     android:layout_width="match_parent" android:layout_height="match_parent" android:weightSum="1">
     <TimePicker android:layout_below="@+id/new_list" android:layout_width="249dp" android:layout_height="wrap_content" android:paddingBottom="30dip" android:id="@+id/timePickerGroup" android:layout_weight="0.10"></TimePicker>
-    <Button android:layout_below="@+id/timePickerGroup" android:layout_weight="0" android:text="Send Group Alarm" android:id="@+id/one_shot_group" android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
 <TextView android:layout_below="@+id/one_shot_group" android:id="@+id/groupdata"    android:layout_width="match_parent" android:layout_height="wrap_content" ></TextView>
 <Spinner android:id="@+id/spinner1" android:layout_width="170dp" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/new_list" android:layout_alignLeft="@+id/timePickerGroup"></Spinner>
 <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/new_list" android:text="New Group" android:layout_alignBottom="@+id/spinner1" android:layout_alignRight="@+id/one_shot_group"></Button>
 
+<DatePicker android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/datePicker2" android:layout_below="@+id/dateButton" android:layout_centerHorizontal="true"></DatePicker>
+
+<Button android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/one_shot_group" android:text="Send Group Alarm" android:layout_alignParentBottom="true" android:layout_alignParentLeft="true" android:layout_marginBottom="28dp"></Button>
+<EditText android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/group_alarm_description" android:layout_alignTop="@+id/datePicker2" android:layout_marginTop="34dp" android:layout_alignRight="@+id/timePickerGroup" android:layout_alignLeft="@+id/descButton">
+    <requestFocus></requestFocus>
+</EditText>
+
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/descButton" android:text="Description" android:layout_above="@+id/datePicker2" android:layout_alignLeft="@+id/datePicker2" android:layout_marginLeft="19dp"></Button>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/dateButton" android:text="Select Date" android:layout_centerVertical="true" android:layout_alignRight="@+id/timePickerGroup"></Button>
 
 </RelativeLayout>

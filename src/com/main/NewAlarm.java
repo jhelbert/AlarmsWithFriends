@@ -7,11 +7,14 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.SystemClock;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.TimePicker.OnTimeChangedListener;
@@ -26,8 +29,15 @@ public class NewAlarm extends Activity {
     TimePicker alarm_time = null;
     
     Calendar calendar = Calendar.getInstance();
-    int hours = calendar.get(Calendar.HOUR);
+    int hours = calendar.get(Calendar.HOUR_OF_DAY);
     int mins = calendar.get(Calendar.MINUTE);
+    int c_month = calendar.get(Calendar.MONTH);
+    int c_date = calendar.get(Calendar.DAY_OF_MONTH);
+    int c_year = calendar.get(Calendar.YEAR);
+    DatePicker date;
+    Button dateButton;
+    Button descButton;
+    EditText description; 
     protected AppPreferences appPrefs;
 
     @Override
@@ -37,10 +47,11 @@ public class NewAlarm extends Activity {
         appPrefs = new AppPreferences(getApplicationContext());
 
         setContentView(R.layout.newalarm);
-
+        date = (DatePicker)findViewById(R.id.datePicker1);
         // Watch for button clicks.
         Button button = (Button)findViewById(R.id.one_shot);
         button.setOnClickListener(mOneShotListener);
+        button.getBackground().setColorFilter(0xFF00FF00, PorterDuff.Mode.MULTIPLY);
         
         
         alarm_time = (TimePicker)findViewById(R.id.timePicker1);
@@ -54,7 +65,62 @@ public class NewAlarm extends Activity {
             }
             
         });
+        
+        date.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), new OnDateChangedListener() {
+
+            @Override
+            public void onDateChanged(DatePicker arg0, int arg1, int arg2,
+                    int arg3) {
+                
+                   c_date = arg3;
+                   c_month = arg2;
+                   c_year = arg1;
+                }
+                
+            });
+                
+        dateButton = (Button)findViewById(R.id.dateButton2);
+        descButton = (Button)findViewById(R.id.descButton2);
+        description = (EditText)findViewById(R.id.alarm_description);
+        date.setVisibility(4);
+        descButton.getBackground().setColorFilter(0xFFFFFF00, PorterDuff.Mode.MULTIPLY);
+        
+        dateButton.getBackground().setColorFilter(0xFFC0C0C0, PorterDuff.Mode.MULTIPLY);
+        dateButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                date.setVisibility(0);
+                dateButton.getBackground().setColorFilter(0xFFFFFF00, PorterDuff.Mode.MULTIPLY);
+                description.setVisibility(4);
+                descButton.getBackground().setColorFilter(0xFFC0C0C0, PorterDuff.Mode.MULTIPLY);
+                
+            }
+            
+        });
+        
+        descButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                date.setVisibility(4);
+                description.setVisibility(0);
+                descButton.getBackground().setColorFilter(0xFFFFFF00, PorterDuff.Mode.MULTIPLY);
+                
+                dateButton.getBackground().setColorFilter(0xFFC0C0C0, PorterDuff.Mode.MULTIPLY);
+                
+            }
+            
+        });
+            
+            
+         
+         
+
+           
     }
+    
+    
 
     private OnClickListener mOneShotListener = new OnClickListener() {
         public void onClick(View v) {
@@ -70,9 +136,10 @@ public class NewAlarm extends Activity {
 
           
             Date date = new Date();
-            int year = calendar.get(Calendar.YEAR);
-            int day = calendar.get(Calendar.DATE);
-            int month = calendar.get(Calendar.MONTH);
+            int year = c_year;
+            int day = c_date;
+            int month = c_month;
+            
             calendar.set(year, month, day, hours, mins, 0);
             
             
@@ -83,8 +150,8 @@ public class NewAlarm extends Activity {
             SQLiteAdapter mySQLiteAdapter = new SQLiteAdapter(getBaseContext());
             mySQLiteAdapter.openToWrite();
             appPrefs.saveSnoozeCount(Integer.toString(Integer.parseInt(appPrefs.getSnoozeCount())));
-            
-            mySQLiteAdapter.insertAlarm("", "", hours + ":" + mins, appPrefs.getSnoozeCount());
+            int true_month = month + 1;
+            mySQLiteAdapter.insertAlarm("", description.getText().toString(), hours + ":" + mins, appPrefs.getSnoozeCount(),true_month + "-" + day + "-" + year);
             
             AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
@@ -93,9 +160,9 @@ public class NewAlarm extends Activity {
             if (mToast != null) {
                 mToast.cancel();
             }
-            mToast = Toast.makeText(NewAlarm.this, "one_shot_scheduled",
-                    Toast.LENGTH_LONG);
-            mToast.show();
+            //mToast = Toast.makeText(NewAlarm.this, "one_shot_scheduled",      Toast.LENGTH_LONG);
+            //mToast.show();
+            finish();
         }
     };
 

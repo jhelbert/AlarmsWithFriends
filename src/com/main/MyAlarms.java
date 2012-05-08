@@ -1,11 +1,13 @@
 package com.main;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import java.io.*;
 import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -56,10 +58,29 @@ public class MyAlarms extends Activity {
                 hrs = 0;
             }
             time = hrs + ":" + mins;
+            final String finaltime = time;
             Toast.makeText(getApplicationContext(), time,
                     Toast.LENGTH_SHORT).show();
-            mySQLiteAdapter.deleteAlarm(time);
-            refresh();
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        mySQLiteAdapter.deleteAlarm(finaltime);
+                        refresh();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                    }
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(MyAlarms.this);
+            builder.setMessage("Delete this Alarm?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+            
           }
         });
         adapter = new ArrayAdapter<String>(this,
@@ -92,7 +113,8 @@ public class MyAlarms extends Activity {
             ArrayList<String>ed_alarms = new ArrayList<String>();
             for (String s : alarms) {
                 String result = "";
-                String[] tokens = s.split(":");
+                String[] temp = s.split("  ");
+                String[] tokens = temp[0].split(":");
                 int hrs = Integer.parseInt(tokens[0]);
                 int mins = Integer.parseInt(tokens[1]);
                 if (hrs == 0) {
@@ -104,7 +126,14 @@ public class MyAlarms extends Activity {
                     result = hrs + ":" + mins + " PM";
                 }
                 if (!result.equals("")) {
-                ed_alarms.add(result);
+                    String ans = result + "  " + temp[1];
+                    try {
+                        ans += "\n" + temp[2];
+                    }
+                    catch(Exception e) {
+                        
+                    }
+                ed_alarms.add(ans);
                 }
             }
             adapter = new ArrayAdapter<String>(this,

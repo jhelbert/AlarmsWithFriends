@@ -52,12 +52,12 @@ public class SQLiteAdapter {
         return found;
     }
 
- public static final String MYDATABASE_NAME = "MY_Daat1782";
+ public static final String MYDATABASE_NAME = "MY_Daat178214";
  public static final String MYDATABASE_TABLE = "MY_TABLE";
  public static final int MYDATABASE_VERSION = 1;
  public static final String SETTER = "Setter";
  public static final String TIME = "Time";
- public static final String SNOOZE = "Snooze";
+ public static final String DATE = "Date";
  public static final String ALARM_DESC = "Desc";
  public static final String SNOOZE = "Snooze";
  
@@ -68,7 +68,7 @@ public class SQLiteAdapter {
  //create table MY_DATABASE (ID integer primary key, Content text not null);
  private static final String SCRIPT_CREATE_DATABASE =
   "create table " + MYDATABASE_TABLE + " ("
-  + SETTER + " text not null, " + ALARM_DESC + " text not null, " + TIME + " text not null, " + SNOOZE + " text not null);";
+  + SETTER + " text not null, " + ALARM_DESC + " text not null, " + TIME + " text not null, " + DATE + " text not null, "+ SNOOZE + " text not null);";
  
  private static final String SCRIPT_CREATE_LISTS =
          "create table " + LIST_TABLE + " ("
@@ -109,13 +109,14 @@ public class SQLiteAdapter {
   return sqLiteDatabase.insert(MYDATABASE_TABLE, null, contentValues);
  }
  
- public long insertAlarm(String setter, String description, String time, String snooze){
+ public long insertAlarm(String setter, String description, String time, String snooze, String date){
      
      ContentValues contentValues = new ContentValues();
      contentValues.put(SETTER, setter);
      contentValues.put(ALARM_DESC, description);
      contentValues.put(TIME, time);
      contentValues.put(SNOOZE, snooze);
+     contentValues.put(DATE, date);
      return sqLiteDatabase.insert(MYDATABASE_TABLE, null, contentValues);
     }
  
@@ -142,20 +143,22 @@ public class SQLiteAdapter {
  
  
  public ArrayList<String> queueAllMain(){
-     String[] columns = new String[]{SETTER,TIME};
+     String[] columns = new String[]{SETTER,TIME, DATE,ALARM_DESC};
      Cursor cursor = sqLiteDatabase.query(MYDATABASE_TABLE, columns, 
        null, null, null, null, null);
      ArrayList<String> result = new ArrayList<String>();
      
      int index_CONTENT = cursor.getColumnIndex(SETTER);
      int index_TIME = cursor.getColumnIndex(TIME);
+     int index_DATE = cursor.getColumnIndex(DATE);
+     int index_DESC = cursor.getColumnIndex(ALARM_DESC);
      int index = 0;
      for(cursor.moveToFirst(); !(cursor.isAfterLast()); cursor.moveToNext()){
          if (cursor.getString(index_CONTENT).equals("")) {
-             result.add(cursor.getString(index_TIME));
+             result.add(cursor.getString(index_TIME) + "  " + cursor.getString(index_DATE) + "  " + cursor.getString(index_DESC));
          }
          else {
-             result.add(cursor.getString(index_TIME) + "set by " + cursor.getString(index_CONTENT));
+             result.add(cursor.getString(index_TIME) + "  " + cursor.getString(index_DATE) + "set by " + cursor.getString(index_CONTENT));
          }
          index ++;
      }

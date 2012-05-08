@@ -14,15 +14,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ReceivedGroupAlarm extends Activity{
+    protected AppPreferences appPrefs;
     @Override
+    
     protected void onCreate(Bundle savedInstanceState) {
        
     super.onCreate(savedInstanceState);
     String alarm = getIntent().getExtras().getString("alarmtime");
+    final String desc = getIntent().getExtras().getString("desc");
     setContentView(R.layout.receivealarm);
     Toast.makeText(getBaseContext(), alarm, Toast.LENGTH_SHORT).show();
     String[] times = alarm.split(",");
-    
+    appPrefs = new AppPreferences(getApplicationContext());
 
     final Calendar calendar = Calendar.getInstance();
     final int year = Integer.parseInt(times[0]);
@@ -31,9 +34,10 @@ public class ReceivedGroupAlarm extends Activity{
     final int hours = Integer.parseInt(times[3]);
     final int mins = Integer.parseInt(times[4]);
     TextView display = (TextView)findViewById(R.id.AcceptAlarmDisplay);
+    
 
-    String month_str =   new DateFormatSymbols().getMonths()[month-1];
-    display.setText("New Alarm for " + hours + ":" + mins + " on " + month_str + " " + day + ", " + year + "?");
+    String month_str =   new DateFormatSymbols().getMonths()[month];
+    display.setText("New Alarm for " + hours + ":" + mins + " on " + month_str + " " + day + ", " + year + "?" + "\n" + "Description: " + desc);
     Button accept = (Button)findViewById(R.id.accept);
     Button dismiss = (Button)findViewById(R.id.dismiss);
     accept.setOnClickListener(new OnClickListener() {
@@ -50,7 +54,8 @@ public class ReceivedGroupAlarm extends Activity{
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
             SQLiteAdapter mySQLiteAdapter = new SQLiteAdapter(getBaseContext());
             mySQLiteAdapter.openToWrite();
-            mySQLiteAdapter.insertAlarm("", "", hours + ":" + mins);
+            int true_month = month + 1;
+            mySQLiteAdapter.insertAlarm("", desc, hours + ":" + mins, appPrefs.getSnoozeCount(),true_month + "-" + day + "-" + year);
             finish();
         }
         
